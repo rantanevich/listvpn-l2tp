@@ -1,4 +1,5 @@
 import re
+import sys
 import string
 import random
 import argparse
@@ -15,7 +16,7 @@ logging.basicConfig(
 
 
 def main():
-    args = get_args()
+    args = parse_args(sys.argv[1:])
     url = URL.format(args.region)
 
     session = requests.session()
@@ -24,12 +25,7 @@ def main():
     payload = generate_payload(response.text, args.username, args.password)
 
     response = session.post(url, data=payload)
-    try:
-        pattern = 'value=[\'"](.+?)[\'"] id=[\'"]myInput'
-        username, password, server = re.findall(pattern, response.text)
-    except ValueError:
-        logging.error('account has not been created')
-        exit(1)
+    username, password, server = extract_auth_data(response.text)
 
     print(
         f'server    : {server}',
@@ -58,7 +54,7 @@ def generate_payload(page, username, password):
             exit(1)
         payload[option] = data
 
-    captcha = re.findall('What is (\d+ . \d+)', page)[0]
+    captcha = re.findall('What is (\\d+ . \\d+)', page)[0]
     payload['human-verifier'] = eval(captcha)
     payload['username'] = username
     payload['password'] = password
@@ -67,7 +63,16 @@ def generate_payload(page, username, password):
     return payload
 
 
-def get_args():
+def extract_auth_data(page):
+    try:
+        pattern = 'value=[\'"](.+?)[\'"] id=[\'"]myInput'
+        return re.findall(pattern, page)
+    except ValueError:
+        logging.error('account has not been created')
+        exit(1)
+
+
+def parse_args(args):
     parser = argparse.ArgumentParser(
         description='Creates L2TP VPN account https://www.listvpn.net'
     )
@@ -83,7 +88,7 @@ def get_args():
                         type=str,
                         default=get_random_string(8),
                         help='password (from 5 to 10 characters)')
-    return parser.parse_args()
+    return parser.parse_args(args)
 
 
 def get_random_string(size=6):
@@ -91,7 +96,7 @@ def get_random_string(size=6):
     return ''.join([random.choice(alphabet) for _ in range(size)])
 
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     try:
         main()
     except Exception as err:
