@@ -1,10 +1,10 @@
 language: python
 
 install:
-  - pip3 install flake8
+  - pip install -r requirements.txt
 script:
   - flake8
-  - python -m unittest tests.test_default -v
+  - python -m unittest --verbose tests.test_default
 
 jobs:
   include:
