@@ -5,8 +5,8 @@ import signup
 
 
 BASEDIR = Path(__file__).parent
-RESPONSE = BASEDIR / 'response.html'
-REGISTRATION = BASEDIR / 'registration.html'
+RESPONSE = BASEDIR / 'fixtures' / 'response.html'
+REGISTRATION = BASEDIR / 'fixtures' / 'registration.html'
 
 
 class TestSignUp(unittest.TestCase):
@@ -46,7 +46,7 @@ class TestSignUp(unittest.TestCase):
             '--username', 'example',
             '--password', 'secret'
         ])
-        self.assertEquals(args.region, 'unitedstates')
+        self.assertEqual(args.region, 'unitedstates')
         self.assertEqual(args.username, 'example')
         self.assertEqual(args.password, 'secret')
 

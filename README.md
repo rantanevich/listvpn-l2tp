@@ -1,12 +1,19 @@
 # ListVPN-L2TP
+[![Build Status](https://travis-ci.org/rantanevich/listvpn-l2tp.svg?branch=main)](https://travis-ci.org/rantanevich/listvpn-l2tp)
 
 It creates free L2TP VPN account on [listvpn.net](https://www.listvpn.net/).
+
+
+## Requirements
+
+  - requests (Python HTTP library)
 
 
 ## Installation
 
 ```sh
 git clone https://github.com/rantanevich/listvpn-l2tp.git .
+pip3 install --user requirements.txt
 python3 signup.py
 ```
 
