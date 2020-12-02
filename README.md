@@ -20,26 +20,24 @@ python3 signup.py
 
 ## Usage
 
-```sh
-usage: signup.py [-h] [-r REGION] [-u USERNAME] [-p PASSWORD]
+Available parameters:
 
-Creates L2TP VPN account https://www.listvpn.net
+| Argument           | Default        | Rule          | Description                                                                  |
+|--------------------|----------------|---------------|------------------------------------------------------------------------------|
+| `-t`, `--type`     | `l2tp`         | `(l2tp|pptp)` | preferable vpn type                                                          |
+| `-r`, `--region`   | `unitedstates` | `[a-z0-9]`    | you have to choose region on listvpn.net and copy server name from url's end |
+| `-u`, `--username` | random string  | `[a-zA-Z0-9]` | username should consist of letters and numbers (length: 5-10)                |
+| `-p`, `--password` | random string  | `[a-zA-Z0-9]` | password should consist of letters and numbers (length: 5-10)                |
 
-optional arguments:
-  -h, --help            show this help message and exit
-  -r REGION, --region REGION
-                        region of vpn server (default: unitedstates)
-  -u USERNAME, --username USERNAME
-                        username (from 5 to 10 characters)
-  -p PASSWORD, --password PASSWORD
-                        password (from 5 to 10 characters)
-```
+PPTP VPN uses AES-128 encryption.
+L2TP VPN uses AES-256 encryption.
 
 
 ## Example
 
 ```sh
 $ python3 signup.py \
+    --type l2tp \
     --region russia \
     --username matreshka \
     --password secret
@@ -49,6 +47,7 @@ username  : matreshka
 password  : secret
 shared key: listvpn
 port      : 1701
+expired   : 2020-12-31
 
 
 $ python3 signup.py
@@ -58,6 +57,17 @@ username  : listvpn.net-GBvgvW0Q
 password  : 4Xrp61Ln
 shared key: listvpn
 port      : 1701
+expired   : 2020-12-31
+
+
+$ python3 signup.py -t pptp
+
+server    : pptpvpn-us.server-listvpn.net
+username  : listvpn.net-zpxfjvK8
+password  : 27s4NGdr
+shared key:
+port      : 1723
+expired   : 2020-12-31
 ```
 
 ## License

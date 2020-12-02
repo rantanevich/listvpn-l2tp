@@ -8,7 +8,9 @@ import logging
 import requests
 
 
-URL = 'https://www.listvpn.net/create-account-vpn-l2tp-{}'
+L2TP_URL = 'https://www.listvpn.net/create-account-vpn-l2tp-{}'
+PPTP_URL = 'https://www.listvpn.net/create-account-vpn-pptp-{}'
+
 logging.basicConfig(
     level=logging.INFO,
     format='[%(asctime)s] (%(filename)s:%(lineno)d) %(levelname)s: %(message)s'
@@ -17,7 +19,14 @@ logging.basicConfig(
 
 def main():
     args = parse_args(sys.argv[1:])
-    url = URL.format(args.region)
+    if args.type == 'l2tp':
+        url = L2TP_URL.format(args.region)
+        shared_key = 'listvpn'
+        port = 1701
+    else:
+        url = PPTP_URL.format(args.region)
+        shared_key = ''
+        port = 1723
 
     session = requests.session()
     response = session.get(url)
@@ -31,8 +40,9 @@ def main():
         f'server    : {server}',
         f'username  : {username}',
         f'password  : {password}',
-        f'shared key: listvpn',
-        f'port      : 1701',
+        f'shared key: {shared_key}',
+        f'port      : {port}',
+        f'expired   : {payload["TanggalEnd"]}',
         sep='\n'
     )
 
@@ -59,7 +69,6 @@ def generate_payload(page, username, password):
     payload['username'] = username
     payload['password'] = password
     payload['submit'] = ''
-
     return payload
 
 
@@ -74,8 +83,13 @@ def extract_auth_data(page):
 
 def parse_args(args):
     parser = argparse.ArgumentParser(
-        description='Creates L2TP VPN account https://www.listvpn.net'
+        description='Creates VPN account on https://www.listvpn.net'
     )
+    parser.add_argument('-t', '--type',
+                        type=str,
+                        default='l2tp',
+                        choices=['l2tp', 'pptp'],
+                        help='vpn protocol')
     parser.add_argument('-r', '--region',
                         type=str,
                         default='unitedstates',
