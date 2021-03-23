@@ -1,5 +1,5 @@
 # ListVPN.net
-[![Build Status](https://travis-ci.org/rantanevich/listvpn-l2tp.svg?branch=main)](https://travis-ci.org/rantanevich/listvpn-l2tp)
+[![Build Status](https://travis-ci.org/rantanevich/listvpn.net.svg?branch=main)](https://travis-ci.org/rantanevich/listvpn.net)
 
 It creates free L2TP/PPTP VPN account on [listvpn.net](https://www.listvpn.net/).
 
